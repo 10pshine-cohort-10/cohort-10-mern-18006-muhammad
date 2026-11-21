@@ -1,8 +1,19 @@
-
-import express from "express";
+import express, { type Application, type Request, type Response } from "express";
 import cors from "cors";
 
-const app = express();
+export interface User {
+    id: number;
+    name: string;
+    email: string;
+}
+
+export interface ApiResponse<T = undefined> {
+    success: boolean;
+    message?: string;
+    data?: T;
+}
+
+const app: Application = express();
 
 // Middleware
 app.use(cors({
@@ -12,7 +23,7 @@ app.use(cors({
 app.use(express.json());
 
 // Welcome route
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response<ApiResponse>) => {
     res.status(200).json({
         success: true,
         message: "Express backend is running!"
@@ -20,8 +31,8 @@ app.get("/", (req, res) => {
 });
 
 // Users API
-app.get("/api/users", (req, res) => {
-    const users = [
+app.get("/api/users", (req: Request, res: Response<ApiResponse<User[]>>) => {
+    const users: User[] = [
         {
             id: 1,
             name: "Ali",
